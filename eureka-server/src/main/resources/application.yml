@@ -1,0 +1,16 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eurekaServer
+
+eureka:
+  instance:
+    hostname: localhost
+  client: #客户端进行eureka注册的配置
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    #在默认设置下，Eureka服务注册中心也会将自己作为客户端来尝试注册它自己，所以我们需要禁用它的客户端注册行为
+    register-with-eureka: false #当前微服务不注册到eureka之中
+    fetch-registry: false #不通过eureka获取服务注册信息
+

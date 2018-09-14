@@ -1,0 +1,38 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://172.16.90.84:3306/community?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: root
+        password: 123456
+    application:
+      name: community-provider-project
+#    cloud: #解决添加actuator监控依赖后报数据源依赖错误的问题
+#      refresh:
+#        enabled: false
+
+
+eureka:
+  instance:
+#    statusPageUrlPath: http://localhost:8080/actuator/info
+#    healthCheckUrlPath: http://localhost:8080/actuator/health
+    instance-id: localhost:8080 #在eureka信息列表显示的主机名称
+    prefer-ip-address: true #服务显示IP地址
+  client: #客户端进行eureka注册的配置
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+#actuator监控配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+info: #/actuator/info 自定义的info端点 否则是空的
+    app:
+      version: 1.0-SNAPSHOT
+      artifactId: provider-project
+      name: community-provider-project
+
+# 打印sql
+logging:
+  level:
+     com.yuchai.itcommunity.providerproject.mapper : debug
