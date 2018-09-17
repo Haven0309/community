@@ -1,11 +1,7 @@
-package com.yuchai.community.providerproject.entity;
+package com.yuchai.community.communitycore.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,11 +12,9 @@ import java.util.List;
  * @author Haven
  * @since 2018-09-14
  */
-public class Teams extends Model<Teams> {
+public class TeamsVO {
 
-    private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -42,6 +36,15 @@ public class Teams extends Model<Teams> {
 
     private String createBy;
 
+    private List<UserVO> Users;
+
+    public List<UserVO> getUsers() {
+        return Users;
+    }
+
+    public void setUsers(List<UserVO> users) {
+        Users = users;
+    }
 
     public Integer getId() {
         return id;
@@ -92,19 +95,15 @@ public class Teams extends Model<Teams> {
     }
 
     @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
     public String toString() {
-        return "Teams{" +
-        "id=" + id +
-        ", teamName=" + teamName +
-        ", teamDesc=" + teamDesc +
-        ", teamLeader=" + teamLeader +
-        ", createTime=" + createTime +
-        ", createBy=" + createBy +
-        "}";
+        return "TeamsVO{" +
+                "id=" + id +
+                ", teamName='" + teamName + '\'' +
+                ", teamDesc='" + teamDesc + '\'' +
+                ", teamLeader='" + teamLeader + '\'' +
+                ", createTime=" + createTime +
+                ", createBy='" + createBy + '\'' +
+                ", Users=" + Users +
+                '}';
     }
 }

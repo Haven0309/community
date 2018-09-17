@@ -10,6 +10,8 @@
         <option value="$PROJECT_DIR$/provider-project/pom.xml" />
         <option value="$PROJECT_DIR$/provider-team/pom.xml" />
         <option value="$PROJECT_DIR$/community-core/pom.xml" />
+        <option value="$PROJECT_DIR$/flowable-server/pom.xml" />
+        <option value="$PROJECT_DIR$/consumer-feign/pom.xml" />
       </list>
     </option>
   </component>

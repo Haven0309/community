@@ -6,8 +6,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yuchai.community.communitycore.util.Result;
 import com.yuchai.community.communitycore.util.ResultUtil;
+import com.yuchai.community.communitycore.vo.ProjectVO;
+import com.yuchai.community.communitycore.vo.TeamsVO;
+import com.yuchai.community.communitycore.vo.UserVO;
 import com.yuchai.community.providerproject.entity.*;
 import com.yuchai.community.providerproject.service.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +33,6 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
     @Autowired
-    private ProjectUserService projectUserService;
-    @Autowired
     private ProjectTeamService projectTeamService;
     @Autowired
     private TeamsService teamsService;
@@ -46,12 +48,8 @@ public class ProjectController {
      * @return
      */
     @PostMapping("/add")
-    public Result add(Project project) {
-        boolean save = projectService.save(project);
-        if (save) {
-            return ResultUtil.genSuccessResult();
-        }
-        return ResultUtil.genFailResult("插入失败");
+    public boolean add(@RequestBody Project project) {
+        return projectService.save(project);
 
     }
 
@@ -62,8 +60,14 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/get/{id}")
-    public Result get(@PathVariable Integer id) {
-        return ResultUtil.genSuccessResult(projectService.getById(id));
+    public ProjectVO get(@PathVariable Integer id) {
+        ProjectVO projectVO = new ProjectVO();
+        BeanUtils.copyProperties(projectService.getById(id),projectVO);
+        List<ProjectTeam> projectTeams = projectTeamService.list(new QueryWrapper<ProjectTeam>().eq("project_id", id));
+        List<TeamsVO> teamsVOS = new ArrayList<>();
+        foreachProjectTeams(projectTeams, teamsVOS);
+        projectVO.setTeams(teamsVOS);
+        return projectVO;
     }
 
     /**
@@ -74,54 +78,42 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/list")
-    public Result list(@RequestParam int pageInt,
-                       @RequestParam int pageSize) {
+    public List<ProjectVO> list(@RequestParam int pageInt,
+                              @RequestParam int pageSize) {
         Page<Project> page = new Page<>(pageInt, pageSize);
         IPage<Project> projectIPage = projectService.page(page, null);
-        List<Project> list = projectIPage.getRecords();
-        for (Project project : list) {
+        List<Project> projects = projectIPage.getRecords();
+        List<ProjectVO> projectVOList = new ArrayList<>();
+        for (Project project : projects) {
+            ProjectVO projectVO = new ProjectVO();
+            BeanUtils.copyProperties(project,projectVO);
             List<ProjectTeam> projectTeams = projectTeamService.list(new QueryWrapper<ProjectTeam>().eq("project_id", project.getId()));
-            List<Teams> teams = new ArrayList<>();
-            List<User> users = new ArrayList<>();
-            for (ProjectTeam pt : projectTeams) {
-                Integer teamId = pt.getTeamId();
-                teams.add(teamsService.getById(teamId));
-                List<TeamUser> teamUsers = teamUserService.list(new QueryWrapper<TeamUser>().eq("team_id", teamId));
-                for (TeamUser tu : teamUsers) {
-                    User user = userService.getOne(new QueryWrapper<User>().eq("user_code", tu.getUserCode()));
-                    users.add(user);
-                }
-            }
-            project.setTeams(teams);
-            project.setUsers(users);
-
+            List<TeamsVO> teamsVOS = new ArrayList<>();
+            foreachProjectTeams(projectTeams, teamsVOS);
+            projectVO.setTeams(teamsVOS);
+            projectVOList.add(projectVO);
         }
-        return ResultUtil.genSuccessResult(list);
+
+        return projectVOList;
     }
 
-    public Result search(@RequestParam int pageInt,
-                         @RequestParam int pageSize) {
-        Page<Project> page = new Page<>(pageInt, pageSize);
-        IPage<Project> projectIPage = projectService.page(page, new QueryWrapper<Project>());
-        List<Project> list = projectIPage.getRecords();
-        for (Project project : list) {
-            List<ProjectTeam> projectTeams = projectTeamService.list(new QueryWrapper<ProjectTeam>().eq("project_id", project.getId()));
-            List<Teams> teams = new ArrayList<>();
-            List<User> users = new ArrayList<>();
-            for (ProjectTeam pt : projectTeams) {
-                Integer teamId = pt.getTeamId();
-                teams.add(teamsService.getById(teamId));
-                List<TeamUser> teamUsers = teamUserService.list(new QueryWrapper<TeamUser>().eq("team_id", teamId));
-                for (TeamUser tu : teamUsers) {
-                    User user = userService.getOne(new QueryWrapper<User>().eq("user_code", tu.getUserCode()));
-                    users.add(user);
-                }
+    private void foreachProjectTeams(List<ProjectTeam> projectTeams, List<TeamsVO> teamsVOS) {
+        for (ProjectTeam projectTeam : projectTeams) {
+            Teams team = teamsService.getById(projectTeam.getTeamId());
+            TeamsVO teamsVO = new TeamsVO();
+            BeanUtils.copyProperties(team,teamsVO);
+            List<UserVO> userVOS = new ArrayList<>();
+            List<TeamUser> teamUsers = teamUserService.list(new QueryWrapper<TeamUser>().eq("team_id", team.getId()));
+            for (TeamUser teamUser : teamUsers) {
+                User user = userService.getOne(new QueryWrapper<User>().eq("user_code", teamUser.getUserCode()));
+                UserVO userVO = new UserVO();
+                BeanUtils.copyProperties(user,userVO);
+                userVOS.add(userVO);
             }
-            project.setTeams(teams);
-            project.setUsers(users);
-
+            teamsVO.setUsers(userVOS);
+            teamsVOS.add(teamsVO);
         }
-        return ResultUtil.genSuccessResult(list);
     }
+
 }
 

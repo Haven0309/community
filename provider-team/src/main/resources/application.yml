@@ -12,14 +12,14 @@ spring:
 
 eureka:
   instance:
-#    statusPageUrlPath: http://localhost:8080/actuator/info
-#    healthCheckUrlPath: http://localhost:8080/actuator/health
     instance-id: localhost:8081 #在eureka信息列表显示的主机名称
     prefer-ip-address: true #服务显示IP地址
   client: #客户端进行eureka注册的配置
     service-url:
       defaultZone: http://localhost:8761/eureka/
 #actuator监控配置
+
+
 management:
   endpoints:
     web:

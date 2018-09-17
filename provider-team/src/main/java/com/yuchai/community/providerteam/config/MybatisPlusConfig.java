@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2017/5/20 21:58
  */
 @Configuration
-@MapperScan("com.yuchai.itcommunity.*.mapper*")
+@MapperScan("com.yuchai.community.*.mapper*")
 public class MybatisPlusConfig {
     /**
      * mybatis-plus分页插件

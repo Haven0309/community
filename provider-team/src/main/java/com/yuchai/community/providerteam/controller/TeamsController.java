@@ -9,6 +9,8 @@ import com.yuchai.community.providerteam.service.TeamsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>
  *  前端控制器
@@ -25,17 +27,13 @@ public class TeamsController {
     private TeamsService teamsService;
 
     @PostMapping("/add")
-    public Result add(Teams team) {
-        boolean save = teamsService.save(team);
-        if (save) {
-            return ResultUtil.genSuccessResult();
-        }
-        return ResultUtil.genFailResult("插入失败");
+    public boolean add(@RequestBody Teams team) {
+        return teamsService.save(team);
     }
 
     @GetMapping("/list")
-    public Result list() {
-        return ResultUtil.genSuccessResult(teamsService.list(new QueryWrapper<Teams>()));
+    public List<Teams> list(@RequestParam(required = false,defaultValue = "") String name) {
+        return teamsService.list(new QueryWrapper<Teams>().like("team_name",name));
     }
 }
 

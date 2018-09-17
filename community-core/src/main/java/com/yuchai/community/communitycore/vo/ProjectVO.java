@@ -1,12 +1,7 @@
-package com.yuchai.community.providerproject.entity;
+package com.yuchai.community.communitycore.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -17,11 +12,8 @@ import java.util.List;
  * @author Haven
  * @since 2018-09-14
  */
-public class Project extends Model<Project> {
+public class ProjectVO {
 
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
@@ -74,7 +66,19 @@ public class Project extends Model<Project> {
      */
     private LocalDate createdDate;
 
+    /**
+     * 团队
+     */
+    private List<TeamsVO> teams;
 
+
+    public List<TeamsVO> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<TeamsVO> teams) {
+        this.teams = teams;
+    }
 
     public Integer getId() {
         return id;
@@ -165,13 +169,8 @@ public class Project extends Model<Project> {
     }
 
     @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
     public String toString() {
-        return "Project{" +
+        return "ProjectVO{" +
                 "id=" + id +
                 ", projectType='" + projectType + '\'' +
                 ", projectName='" + projectName + '\'' +
@@ -183,6 +182,7 @@ public class Project extends Model<Project> {
                 ", status='" + status + '\'' +
                 ", publisherId=" + publisherId +
                 ", createdDate=" + createdDate +
+                ", teams=" + teams +
                 '}';
     }
 }

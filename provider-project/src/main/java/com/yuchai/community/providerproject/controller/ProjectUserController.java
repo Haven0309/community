@@ -37,14 +37,14 @@ public class ProjectUserController {
      * @return
      */
     @GetMapping("/list/{id}")
-    public Result list(@PathVariable Integer id){
+    public List<Project> list(@PathVariable Integer id){
         List<Project> list = new ArrayList<>();
         List<ProjectUser> projectUsers = projectUserService.list(new QueryWrapper<ProjectUser>().eq("user_code",id));
         for (ProjectUser projectUser:projectUsers) {
             Project project = projectService.getById(projectUser.getProjectId());
             list.add(project);
         }
-        return ResultUtil.genSuccessResult(list);
+        return list;
     }
 
     /**
@@ -53,9 +53,8 @@ public class ProjectUserController {
      * @return
      */
     @GetMapping("/salary/user/{id}")
-    public Result salaryAll(@PathVariable Integer id){
-        List<ProjectUser> projectUsers = projectUserService.list(new QueryWrapper<ProjectUser>().eq("user_code",id));
-        return ResultUtil.genSuccessResult(projectUsers);
+    public List<ProjectUser> salaryAll(@PathVariable Integer id){
+        return projectUserService.list(new QueryWrapper<ProjectUser>().eq("user_code",id));
     }
 
     /**
@@ -64,9 +63,8 @@ public class ProjectUserController {
      * @return
      */
     @GetMapping("/salary/project/{id}")
-    public Result salaryByprojectId(@PathVariable Integer id){
-        List<ProjectUser> projectUsers = projectUserService.list(new QueryWrapper<ProjectUser>().eq("project_id",id));
-        return ResultUtil.genSuccessResult(projectUsers);
+    public List<ProjectUser> salaryByprojectId(@PathVariable Integer id){
+        return projectUserService.list(new QueryWrapper<ProjectUser>().eq("project_id",id));
     }
 }
 

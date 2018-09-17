@@ -1,0 +1,21 @@
+server:
+  port: 8089
+spring:
+  application:
+    name: consumer-feign
+
+eureka:
+  instance:
+    instance-id: localhost:8089 #在eureka信息列表显示的主机名称
+    prefer-ip-address: true #服务显示IP地址
+  client: #客户端进行eureka注册的配置
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+#解决超时报错
+ribbon:
+  eager-load:
+    enabled: true
+hystrix:
+  metrics:
+    enabled: false

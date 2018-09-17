@@ -16,6 +16,9 @@ zuul:
   ignored-services: "*" #禁用所有服务名称进行访问
   routes: #路由映射配置
     community-provider-project: /project-proxy/**
+    community-provider-team: /team-proxy/**
+    flowable-server: /flowable-proxy/**
+    consumer-feign: /feign-proxy/**
 #  prefix:  /gateway  #设置前缀
 #  ignored-services: sv-provider-project  #禁用某个服务名称进行访问
 

@@ -1,16 +1,13 @@
 package com.yuchai.community.providerteam.controller;
 
 
-import com.yuchai.community.communitycore.util.Result;
-import com.yuchai.community.communitycore.util.ResultUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yuchai.community.providerteam.entity.TeamUser;
 import com.yuchai.community.providerteam.service.TeamUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 /**
  * <p>
@@ -28,8 +25,12 @@ public class TeamUserController {
     private TeamUserService teamUserService;
 
     @PostMapping("/add")
-    public Result add(TeamUser teamUser) {
-        return ResultUtil.genSuccessResult(teamUserService.save(teamUser));
+    public boolean add(@RequestBody TeamUser teamUser) {
+        return teamUserService.save(teamUser);
+    }
+    @GetMapping("/list/{id}")
+    public List<TeamUser> list(@PathVariable Integer id){
+        return teamUserService.list(new QueryWrapper<TeamUser>().eq("team_id",id));
     }
 
 }

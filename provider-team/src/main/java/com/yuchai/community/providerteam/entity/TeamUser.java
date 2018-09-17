@@ -1,6 +1,7 @@
 package com.yuchai.community.providerteam.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
@@ -39,6 +40,12 @@ public class TeamUser extends Model<TeamUser> {
      * 是否已经退出
      */
     private String quit;
+
+    /**
+     * 用户信息
+     */
+    @TableField(exist = false)
+    private User userinfo;
 
 
     public Integer getId() {
